@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.parse.bolts:bolts-android:1.+'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
+    compile 'com.jakewharton:butterknife:7.0.1'
 }
