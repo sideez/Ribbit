@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.EditText;
 
 import com.parse.ParseException;
@@ -36,6 +37,7 @@ public class SignUpActivity extends AppCompatActivity {
             dialog.show();
 
         } else {
+            setProgressBarIndeterminateVisibility(true);
             // this is where we will save user
             ParseUser newUser = new ParseUser();
             newUser.setUsername(username);
@@ -44,6 +46,7 @@ public class SignUpActivity extends AppCompatActivity {
             newUser.signUpInBackground(new SignUpCallback() {
                 @Override
                 public void done(ParseException e) {
+                    setProgressBarIndeterminateVisibility(false);
                     if (e == null) {
                         // Success! Parse auto authenticate user, send user to inbox (MainActivity)
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
@@ -66,6 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);

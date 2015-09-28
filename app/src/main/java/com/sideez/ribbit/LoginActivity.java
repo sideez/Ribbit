@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.EditText;
 
 import com.parse.LogInCallback;
@@ -39,9 +40,11 @@ public class LoginActivity extends AppCompatActivity {
             dialog.show();
 
         } else {
+            setProgressBarIndeterminateVisibility(true);
             // this is where we will save user
             ParseUser.logInInBackground(username, password, new LogInCallback() {
                 public void done(ParseUser user, ParseException e) {
+                    setProgressBarIndeterminateVisibility(false);
                     if (user != null) {
                         // Hooray! The user is logged in.
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -65,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
