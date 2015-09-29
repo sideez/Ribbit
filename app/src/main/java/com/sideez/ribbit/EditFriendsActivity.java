@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 
 import com.parse.FindCallback;
@@ -27,6 +28,8 @@ public class EditFriendsActivity extends ListActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_friends);
+
+        getListView().setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE); // Gets the default ListView associated with this activity
     }
 
     @Override
@@ -50,7 +53,7 @@ public class EditFriendsActivity extends ListActivity {
                         usernames[i] = user.getUsername();
                         i++;
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(EditFriendsActivity.this,
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(EditFriendsActivity.this,
                             android.R.layout.simple_list_item_checked, usernames);
                     setListAdapter(adapter);
                 } else {
