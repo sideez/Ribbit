@@ -6,14 +6,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.List;
 
@@ -22,6 +26,8 @@ public class EditFriendsActivity extends ListActivity {
     private static final String TAG = EditFriendsActivity.class.getSimpleName();
 
     private List<ParseUser> mUsers;
+    private ParseRelation<ParseUser> mFriendsRelation;
+    private ParseUser mCurrentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,9 @@ public class EditFriendsActivity extends ListActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        mCurrentUser = ParseUser.getCurrentUser();
+        mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
 
         setProgressBarIndeterminate(true);
 
@@ -90,5 +99,26 @@ public class EditFriendsActivity extends ListActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        if (l.isItemChecked(position)) {
+            // add friend
+            mFriendsRelation.add(mUsers.get(position));
+            mCurrentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e != null) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            });
+        } else {
+            // remove friend
+
+        }
     }
 }
