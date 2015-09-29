@@ -10,5 +10,8 @@
           android:title="@string/logout_menu_label"
           android:orderInCategory="0"
           app:showAsAction="never"/>
+      <item android:id="@+id/action_edit_friends"
+            android:title="@string/menu_edit_friends_label"
+            app:showAsAction="never"/>
 
 </menu>
