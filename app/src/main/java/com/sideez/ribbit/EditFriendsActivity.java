@@ -65,6 +65,8 @@ public class EditFriendsActivity extends ListActivity {
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(EditFriendsActivity.this,
                             android.R.layout.simple_list_item_checked, usernames);
                     setListAdapter(adapter);
+
+                    addFriendCheckmarks(); // not efficient for large apps
                 } else {
                     Log.e(TAG, e.getMessage());
                     AlertDialog.Builder builder = new AlertDialog.Builder(EditFriendsActivity.this);
@@ -77,6 +79,27 @@ public class EditFriendsActivity extends ListActivity {
             }
         });
 
+    }
+
+    // This method is not efficient for large scale applications
+    private void addFriendCheckmarks() {
+        mFriendsRelation.getQuery().findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> list, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < mUsers.size(); i++) {
+                        ParseUser user = mUsers.get(i);
+                        for (ParseUser friend : list) {
+                            if (friend.getObjectId().equals(user.getObjectId())) {
+                                getListView().setItemChecked(i, true);
+                            }
+                        }
+                    }
+                } else {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        });
     }
 
     @Override
