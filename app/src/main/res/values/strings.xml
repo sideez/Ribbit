@@ -25,6 +25,7 @@
     <string name="title_activity_edit_friends">Edit Friends</string>
     <string name="generic_error_title">Oops!</string>
     <string name="camera_menu_label">Camera</string>
+    <string name="media_storage_error_msg">There was a problem accessing media storage.</string>
 
     <string-array name="camera_choices">
         <item>Take Picture</item>

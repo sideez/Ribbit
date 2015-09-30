@@ -3,7 +3,9 @@ package com.sideez.ribbit;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 
@@ -24,6 +27,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     private static final int REQUEST_VIDEO_CAPTURE = 1;
     private static final int REQUEST_IMAGE_PICKER = 2;
     private static final int REQUEST_VIDEO_PICKER = 3;
+    private static final int MEDIA_TYPE_IMAGE = 4;
+    private static final int MEDIA_TYPE_VIDEO = 5;
+
+    private Uri mMediaUri;
 
     private DialogInterface.OnClickListener mDialogListener = new DialogInterface.OnClickListener() {
         @Override
@@ -32,8 +39,17 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 case 0: // Take Picture
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                        mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                        if (mMediaUri != null) {
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+                            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                        } else {
+                            Toast.makeText(MainActivity.this,
+                                    R.string.media_storage_error_msg,
+                                    Toast.LENGTH_LONG).show();
+                        }
                     }
+
                     break;
                 case 1: // Take Video
                     break;
@@ -44,6 +60,27 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             }
         }
     };
+
+    private Uri getOutputMediaFileUri(int mediaTypeImage) {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+        if (isExternalStorageAvailable()) {
+
+        } else {
+
+        }
+        return null;
+    }
+
+    private boolean isExternalStorageAvailable() {
+        String state = Environment.getExternalStorageState();
+
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
