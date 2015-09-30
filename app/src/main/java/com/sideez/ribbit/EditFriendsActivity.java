@@ -131,17 +131,18 @@ public class EditFriendsActivity extends ListActivity {
         if (l.isItemChecked(position)) {
             // add friend
             mFriendsRelation.add(mUsers.get(position));
-            mCurrentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e != null) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }
-            });
         } else {
             // remove friend
-
+            mFriendsRelation.remove(mUsers.get(position));
         }
+
+        mCurrentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        });
     }
 }

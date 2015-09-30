@@ -8,10 +8,14 @@
           app:showAsAction="never"/>
       <item android:id="@+id/logout"
           android:title="@string/logout_menu_label"
-          android:orderInCategory="0"
+          android:orderInCategory="99"
           app:showAsAction="never"/>
       <item android:id="@+id/action_edit_friends"
             android:title="@string/menu_edit_friends_label"
             app:showAsAction="never"/>
+      <item android:id="@+id/action_camera"
+            android:title="@string/camera_menu_label"
+            android:icon="@drawable/ic_camera_alt_white_24dp"
+            app:showAsAction="always"/>
 
 </menu>
