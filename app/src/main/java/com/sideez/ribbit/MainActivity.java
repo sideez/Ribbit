@@ -20,6 +20,11 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -61,10 +66,47 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         }
     };
 
-    private Uri getOutputMediaFileUri(int mediaTypeImage) {
+    // Saving Media Files
+    // Resource: http://developer.android.com/guide/topics/media/camera.html#saving-media
+    private Uri getOutputMediaFileUri(int mediaType) {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
         if (isExternalStorageAvailable()) {
+            // get the URI
+
+            // 1. Get the external storage directory
+            String appName = MainActivity.this.getString(R.string.app_name);
+            File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                    appName);
+
+            // 2. Create our subdirectory
+            if (! mediaStorageDir.exists()) {
+                if (! mediaStorageDir.mkdirs()) {
+                    Log.e(TAG, getString(R.string.fail_mkdir));
+                    return null;
+                }
+            }
+
+            // 3. Create the file
+            File mediaFile;
+            Date now = new Date();
+            String timestamp = new SimpleDateFormat("yyyymmdd_hhmmss", Locale.CANADA).format(now);
+
+            // 4. Create the filename
+            String path = mediaStorageDir.getPath() + File.separator;
+            if (mediaType == MEDIA_TYPE_IMAGE) {
+                mediaFile = new File(path + "IMG_" + timestamp + ".jpg");
+            } else if (mediaType == MEDIA_TYPE_VIDEO) {
+                mediaFile = new File(path + "VID_" + timestamp + ".mp4");
+            } else {
+                return null;
+            }
+
+            Log.d(TAG, "File: " + Uri.fromFile(mediaFile));
+
+            // 5. Return the file's URI
+
+            return Uri.fromFile(mediaFile);
 
         } else {
 
